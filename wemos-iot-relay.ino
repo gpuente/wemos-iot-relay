@@ -3,17 +3,19 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h> 
 #include <ESP8266WebServer.h>
+#include "Relay.h"
 
 /* Set these to your desired credentials. */
 const char *ssid = "wemos-iot-relay";
 const char *password = "iotpassword";
-const int RELAY = 5;
+// const int RELAY = 5;
 
 char ssidClient[32];
 char passwordClient[64];
 bool providedCredentials = false;
 
 ESP8266WebServer server(80);
+Relay relay(5);
 
 /* Just a little test message.  Go to http://192.168.4.1 in a web browser
  * connected to this access point to see it.
@@ -38,12 +40,14 @@ void handleConnect() {
 }
 
 void handleOn() {
-  digitalWrite(RELAY, HIGH);
+  // digitalWrite(RELAY, HIGH);
+  relay.setStatus(true);
   server.send(200, "text/html", "<h1>Relay: on</h1>");
 }
 
 void handleOff() {
-  digitalWrite(RELAY, LOW);
+  // digitalWrite(RELAY, LOW);
+  relay.setStatus(false);
   server.send(200, "text/html", "<h1>Relay: off</h1>");
 }
 
@@ -61,11 +65,13 @@ void connectToAP() {
 
   Serial.print("Connected, IP address: ");
   Serial.println(WiFi.localIP());
+
+  server.send(200, "text/html", "<h1>Connected! IP: " + WiFi.localIP().toString() + "</h1>");
 }
 
 void setup() {
 	delay(1000);
-  pinMode(RELAY, OUTPUT);
+  // pinMode(RELAY, OUTPUT);
   WiFi.mode(WIFI_AP_STA);
   
 	Serial.begin(115200);
@@ -83,6 +89,8 @@ void setup() {
   server.on("/off", HTTP_GET, handleOff);
 	server.begin();
 	Serial.println("HTTP server started");
+
+  Serial.println(relay.toString());
 }
 
 void loop() {

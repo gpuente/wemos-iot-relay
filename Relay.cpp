@@ -1,34 +1,5 @@
-#include <Arduino.h>
-
-#ifndef Relay_h
-#define Relay_h
-
-typedef struct {
-    int pin;
-    int id;
-    String alias;
-    bool status;
-    bool enabled;
-} relayObject;
-
-class Relay {
-    private:
-        relayObject _state;
-        void commit();
-
-    public:
-        Relay(int pin);
-        Relay(int pin, String alias);
-        Relay(int pin, bool status);
-        Relay(int pin, String alias, bool status);
-        Relay(int pin, String alias, bool status, bool enabled);
-        Relay(int pin, int id, String alias, bool status, bool enabled);
-        String toString();
-        relayObject swap();
-        relayObject getState();
-        relayObject setStatus(bool status);
-        relayObject setEnabled(bool enabled);
-};
+#include "Arduino.h"
+#include "Relay.h"
 
 Relay::Relay(int pin) {
     _state.pin = pin;
@@ -96,10 +67,10 @@ void Relay::commit() {
 
 String Relay::toString() {
     String result = "pin: " + String(_state.pin);
-    result = ", id: " + String(_state.id);
-    result = ", alias: " + _state.alias;
-    result = ", status: " + String(_state.status);
-    result = ", enabled: " + String(_state.enabled);
+    result = result + ", id: " + String(_state.id);
+    result = result + ", alias: " + _state.alias;
+    result = result + ", status: " + String(_state.status);
+    result = result + ", enabled: " + String(_state.enabled);
     return result;
 }
 
@@ -123,5 +94,3 @@ relayObject Relay::setEnabled(bool enabled) {
     _state.enabled = enabled;
     return _state;
 }
-
-#endif
