@@ -15,6 +15,7 @@ char passwordClient[64];
 bool providedCredentials = false;
 
 ESP8266WebServer server(80);
+
 Relay relay(5);
 
 /* Just a little test message.  Go to http://192.168.4.1 in a web browser
@@ -73,6 +74,7 @@ void setup() {
 	delay(1000);
   // pinMode(RELAY, OUTPUT);
   WiFi.mode(WIFI_AP_STA);
+  setupServer();
   
 	Serial.begin(115200);
 	Serial.println();
