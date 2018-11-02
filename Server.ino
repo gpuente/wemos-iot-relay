@@ -126,6 +126,18 @@ void updateRelay() {
     relay.setStatus(status);
   }
 
+  if (root.containsKey("alias")) {
+    char *alias = root["alias"];
+  }
+
+  if (root.containsKey("enabled")) {
+    bool enabled = root["enabled"];
+  }
+
+  if (root.containsKey("pin")) {
+    int pin = root["pin"];
+  }
+
   Serial.println("Relay updated:");
   Serial.println(relay.toString());
   

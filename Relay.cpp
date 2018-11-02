@@ -109,6 +109,16 @@ relayObject Relay::setEnabled(bool enabled) {
   return _state;
 }
 
+relayObject Relay::setPin(int pin) {
+  _state.pin = pin;
+  return _state;
+}
+
+relayObject Relay::setAlias(char *alias) {
+  _state.alias = alias;
+  return _state;
+}
+
 JsonObject& Relay::toJson() {
   StaticJsonBuffer<300> jsonBuffer;
   JsonObject& root = jsonBuffer.createObject();

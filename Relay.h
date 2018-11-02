@@ -23,6 +23,8 @@ class Relay {
     relayObject getState();
     relayObject setStatus(bool status);
     relayObject setEnabled(bool enabled);
+    relayObject setPin(int pin);
+    relayObject setAlias(char *alias);
     JsonObject& toJson();
 };
 
