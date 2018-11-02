@@ -11,11 +11,11 @@ class Relay {
 
     public:
         Relay(int pin);
-        Relay(int pin, String alias);
+        Relay(int pin, char *alias);
         Relay(int pin, bool status);
-        Relay(int pin, String alias, bool status);
-        Relay(int pin, String alias, bool status, bool enabled);
-        Relay(int pin, int id, String alias, bool status, bool enabled);
+        Relay(int pin, char *alias, bool status);
+        Relay(int pin, char *alias, bool status, bool enabled);
+        Relay(int pin, int id, char *alias, bool status, bool enabled);
         String toString();
         relayObject swap();
         relayObject getState();
