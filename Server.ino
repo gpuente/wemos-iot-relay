@@ -57,6 +57,10 @@ void handleOff() {
 	server.send(200, "text/html", "<h1>Relay: off</h1>");
 }
 
+
+/*
+ * Send json of Relay by ID
+ */
 void getRelay() {
 	if (server.arg("id") == "") {
 		handleError(404, "id element not provided");
@@ -81,6 +85,13 @@ void getRelays() {
 
 }
 
+
+/*
+ * Update a relay by ID
+ * This method gets an json object from request, encode and set 
+ * parameters requested by client.
+ * On error, method response with error response.
+ */
 void updateRelay() {
   if (server.args() < 1) {
     handleError(404, "json object not provided");
@@ -128,6 +139,10 @@ void deleteRelay() {
 
 }
 
+
+/*
+ * Send an error http response to client
+ */
 void handleError(int httpCode, String message) {
   StaticJsonBuffer<150> jsonBuffer;
   JsonObject& root = jsonBuffer.createObject();
