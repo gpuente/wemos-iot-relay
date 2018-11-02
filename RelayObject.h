@@ -6,7 +6,7 @@
 struct relayObject {
     int pin;
     int id;
-    String alias;
+    char *alias;
     bool status;
     bool enabled;
 };

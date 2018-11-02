@@ -11,7 +11,7 @@ Relay::Relay(int pin) {
     commit();
 }
 
-Relay::Relay(int pin, String alias) {
+Relay::Relay(int pin, char *alias) {
     _state.pin = pin;
     _state.id = pin;
     _state.alias = alias;
@@ -31,7 +31,7 @@ Relay::Relay(int pin, bool status) {
     commit();
 }
 
-Relay::Relay(int pin, String alias, bool status) {
+Relay::Relay(int pin, char *alias, bool status) {
     _state.pin = pin;
     _state.id = pin;
     _state.alias = alias;
@@ -41,7 +41,7 @@ Relay::Relay(int pin, String alias, bool status) {
     commit();
 }
 
-Relay::Relay(int pin, String alias, bool status, bool enabled) {
+Relay::Relay(int pin, char *alias, bool status, bool enabled) {
     _state.pin = pin;
     _state.id = pin;
     _state.alias = alias;
@@ -51,7 +51,7 @@ Relay::Relay(int pin, String alias, bool status, bool enabled) {
     commit();
 }
 
-Relay::Relay(int pin, int id, String alias, bool status, bool enabled) {
+Relay::Relay(int pin, int id, char *alias, bool status, bool enabled) {
     _state.pin = pin;
     _state.id = id;
     _state.alias = alias;
@@ -68,7 +68,7 @@ void Relay::commit() {
 String Relay::toString() {
     String result = "pin: " + String(_state.pin);
     result = result + ", id: " + String(_state.id);
-    result = result + ", alias: " + _state.alias;
+    result = result + ", alias: " + String(_state.alias);
     result = result + ", status: " + String(_state.status);
     result = result + ", enabled: " + String(_state.enabled);
     return result;
