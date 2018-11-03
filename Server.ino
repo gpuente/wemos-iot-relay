@@ -209,8 +209,8 @@ void updateRelay() {
 
  
   if (root.containsKey("alias")) {
-    const char *alias = root["alias"];
-    relay.setAlias((char*)alias);
+    String alias = root["alias"];
+    relay.setAlias(alias);
   }
 
   
@@ -367,8 +367,8 @@ void createRelay() {
   Relay& relay = relayCollection.getByIndex(index);
  
   if (root.containsKey("alias")) {
-    const char *alias = root["alias"];
-    relay.setAlias((char*)alias);
+    String alias = root["alias"];
+    relay.setAlias(alias);
   }
 
   relay.setEnabled(true);
