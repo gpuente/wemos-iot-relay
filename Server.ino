@@ -96,6 +96,9 @@ void handleOff() {
 
 /*
  * Send json of Relay by ID
+ * 
+ * use: http://host/api/v1/relay?id=1
+ * method: GET
  */
 void getRelay() {
 	if (server.arg("id") == "") {
@@ -122,7 +125,12 @@ void getRelay() {
 
 
 
-
+/*
+ * Return a json Array with all relays objects available.
+ * 
+ * use: http://host/api/v1/relays
+ * method: GET
+ */
 void getRelays() {
   Relay*& collection = relayCollection.getCollection();
   Serial.println(collection[1].toString());
@@ -157,6 +165,10 @@ void getRelays() {
  * This method gets an json object from request, encode and set 
  * parameters requested by client.
  * On error, method response with error response.
+ * 
+ * use: http://host/api/v1/relay
+ * method: PUT
+ * params: { "id": 1, "status": true, "alias": "some text", "enabled": true }
  */
 void updateRelay() {
   if (server.args() < 1) {
@@ -222,6 +234,9 @@ void updateRelay() {
 /*
  * Change the enabled property of a relay to false
  * If property enable of a relay is false, the relay can't turn on
+ * 
+ * use: http://host/api/v1/relay?id=1
+ * method: DELETE
  */
 void deleteRelay() {
   if (server.arg("id") == "") {
@@ -255,6 +270,9 @@ void deleteRelay() {
 
 /*
  * Switch status of a relay
+ * 
+ * use: http://host/api/v1/relay/switch?id=1
+ * method: PUT
  */
 void switchRelay() {
   if (server.arg("id") == "") {
