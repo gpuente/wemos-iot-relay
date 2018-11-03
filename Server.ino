@@ -292,7 +292,7 @@ void switchRelay() {
   }
 
   Relay& relay = relayCollection.getByIndex(index);
-  relay.setStatus(!relay.getState().status);
+  relay.swap();
 
   Serial.println("Relay updated:");
   Serial.println(relay.toString());
