@@ -1,8 +1,7 @@
 void setupServer() {
 	server.on("/", HTTP_GET, handleRoot);
 	server.on("/connect", HTTP_POST, handleConnect);
-	server.on("/on", HTTP_GET, handleOn);
-	server.on("/off", HTTP_GET, handleOff);
+  server.on("/scannetworks", HTTP_POST, scanWifiNetworks);
 	server.on("/api/v1/relay", HTTP_GET, getRelay);
 	server.on("/api/v1/relays", HTTP_GET, getRelays);
 	server.on("/api/v1/relay", HTTP_PUT, updateRelay);
@@ -47,6 +46,38 @@ void handleConnect() {
 
 
 
+void scanWifiNetworks() {
+  Serial.println("Scanning networks");
+  int n = WiFi.scanNetworks();
+  Serial.println("Scan done");
+
+  StaticJsonBuffer<2200> jsonBuffer;
+  JsonObject& root = jsonBuffer.createObject();
+  JsonArray& data = root.createNestedArray("data");
+
+  if (n > 0) {
+    int limit = (n > 15) ? 15 : n;
+    
+    for (int i = 0; i < limit; i++) {
+      JsonObject& object = data.createNestedObject();
+      object["index"] = i;
+      object["ssid"] = WiFi.SSID(i);
+      object["rssi"] = WiFi.RSSI(i);
+      object["encryption"] = WiFi.encryptionType(i) == ENC_TYPE_NONE ? "none" : "*";
+    }
+  }
+  
+  char json[5000];
+  root.printTo(json);
+
+  server.send(200, "application/json", json);
+}
+
+
+
+
+
+
 
 void connectToAP() {
   Serial.println("Connecting to: ");
@@ -65,29 +96,6 @@ void connectToAP() {
 
   server.send(200, "text/html", "<h1>Connected! IP: " + WiFi.localIP().toString() + "</h1>");
 }
-
-
-
-
-
-
-
-void handleOn() {
-	relays[1].setStatus(true);
-	server.send(200, "text/html", "<h1>Relay: on</h1>");
-}
-
-
-
-
-
-
-
-void handleOff() {
-	relays[1].setStatus(false);
-	server.send(200, "text/html", "<h1>Relay: off</h1>");
-}
-
 
 
 
