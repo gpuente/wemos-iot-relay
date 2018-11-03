@@ -11,6 +11,7 @@ class RelayCollection {
   public:
     RelayCollection(Relay *collection);
     Relay& getByIndex(int index);
+    Relay*& getCollection();
     int getIndexById(int id);
     bool hasIndex(int index);
 };

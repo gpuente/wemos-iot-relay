@@ -6,6 +6,10 @@ RelayCollection::RelayCollection(Relay *collection) {
 	_collection = collection;
 }
 
+Relay*& RelayCollection::getCollection() {
+  return _collection;
+}
+
 Relay& RelayCollection::getByIndex(int index) {
   return _collection[index];
 }
@@ -35,4 +39,3 @@ bool RelayCollection::hasIndex(int index) {
 
   return index < sizeof(_collection) ? true : false;
 }
-
