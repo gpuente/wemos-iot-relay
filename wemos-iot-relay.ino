@@ -20,10 +20,10 @@ ESP8266WebServer server(80);
 
 /* Default relays available */
 Relay relays[] = {
-	Relay(16, 0, "Pin 16 -> D0"),
-	Relay(5, 1, "Pin 5 -> D1"),
-	Relay(4, 2, "Pin 4 -> D2"),
-	Relay(0, 3, "Pin 0 -> D3")
+	Relay(16, 1, "Undefined"),
+	Relay(5, 2, "Pin 5 -> D1"),
+	Relay(4, 3, "Undefined"),
+	Relay(0, 4, "Undefined")
 };
 
 RelayCollection relayCollection(relays);

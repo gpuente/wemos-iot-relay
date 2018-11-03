@@ -115,7 +115,10 @@ void getRelay() {
   }
   
   char json[120];
-  relayCollection.getByIndex(id).toJson().printTo(json);
+  Relay& relay = relayCollection.getByIndex(index);
+  relay.toJson().printTo(json);
+
+  Serial.println(relay.toString());
  
   server.send(200, "application/json", json);
 }
@@ -192,7 +195,7 @@ void updateRelay() {
   int id = root["id"];
   int index = relayCollection.getIndexById(id);
 
-  if (index < 1) {
+  if (index < 0) {
     handleError(404, "id is not valid");
     return;
   }
@@ -247,7 +250,7 @@ void deleteRelay() {
   int id = server.arg("id").toInt();
   int index = relayCollection.getIndexById(id);
 
-  if (index < 1) {
+  if (index < 0) {
     handleError(404, "id is not valid");
     return;
   }
@@ -283,7 +286,7 @@ void switchRelay() {
   int id = server.arg("id").toInt();
   int index = relayCollection.getIndexById(id);
 
-  if (index < 1) {
+  if (index < 0) {
     handleError(404, "id is not valid");
     return;
   }
@@ -327,7 +330,55 @@ void handleError(int httpCode, String message) {
 
 
 
-
+/*
+ * Set enabled true to a relay available
+ * 
+ * use: http://host/api/v1/relay
+ * method: POST
+ * params: { "id": 1, "alias": "some text" }
+ */
 void createRelay() {
+  if (server.args() < 1) {
+    handleError(404, "json object not provided");
+    return;
+  }
 
+  StaticJsonBuffer<300> jsonBuffer;
+  JsonObject& root = jsonBuffer.parseObject(server.arg(0));
+
+  if (!root.success()) {
+    handleError(404, "parse json object failed");
+    return;
+  }
+
+  if (!root.containsKey("id")) {
+    handleError(404, "id not provided");
+    return;
+  }
+
+  int id = root["id"];
+  int index = relayCollection.getIndexById(id);
+
+  if (index < 0) {
+    handleError(404, "id is not valid");
+    return;
+  }
+
+  Relay& relay = relayCollection.getByIndex(index);
+ 
+  if (root.containsKey("alias")) {
+    const char *alias = root["alias"];
+    relay.setAlias((char*)alias);
+  }
+
+  relay.setEnabled(true);
+  relay.setStatus(false);
+
+  Serial.println("Relay updated:");
+  Serial.println(relay.toString());
+  
+  char json[120];
+  relay.toJson().printTo(json);
+
+  server.send(200, "application/json", json);
 }
