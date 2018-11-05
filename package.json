@@ -1,0 +1,20 @@
+{
+  "name": "wemos-iot-relay",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/gpuente/wemos-iot-relay.git",
+  "author": "Guillermo Puente Sandoval <guillermo.ps09@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-htmlmin": "^5.0.1",
+    "gulp-inline": "^0.1.3",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-replace": "^1.0.0",
+    "gulp-uglify": "^3.0.1"
+  },
+  "scripts": {
+    "build:html": "gulp"
+  },
+  "dependencies": {}
+}
