@@ -21,6 +21,7 @@ xhr.onload = function() {
 
 refreshButton.onclick = function() {
     console.log('press');
+    xhr.timeout = 5000;
     xhr.open('POST', endpoint);
     xhr.send();
 };
