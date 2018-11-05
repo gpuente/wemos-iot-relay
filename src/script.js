@@ -58,6 +58,10 @@ function printOptions() {
   });
 }
 
+function submitForm(form) {
+  console.log('submit!');
+}
+
 refreshButton.onclick = function() {
   console.log('refresh networks');
   disableSelect();
