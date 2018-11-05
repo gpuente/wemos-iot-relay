@@ -4,8 +4,9 @@ var backButton = document.getElementById('backButton');
 var ssidText = document.getElementById('ssidText');
 var ssidSelect = document.getElementById('ssidSelect');
 var changeInput = document.getElementById('changeInput');
+var loadingLabel = document.getElementById('loadingLabel');
 var networks = null;
-var endpoint = 'http://192.168.4.1/scannetworks';
+var endpoint = 'http://' + location.host + '/scannetworks';
 
 var xhr = new XMLHttpRequest();
 xhr.onload = function() {
@@ -34,10 +35,16 @@ function cleanSelectoptions() {
 
 function enableSelect() {
   ssidSelect.removeAttribute('disabled');
+  loadingLabel.classList.add('hide');
+  refreshButton.classList.remove('hide');
+  changeInput.classList.remove('hide');
 }
 
 function disableSelect() {
   ssidSelect.setAttribute('disabled', 'disabled');
+  loadingLabel.classList.remove('hide');
+  refreshButton.classList.add('hide');
+  changeInput.classList.add('hide');
 }
 
 function printOptions() {
