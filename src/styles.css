@@ -63,6 +63,10 @@ select {
     background-color: white;
 }
 
+select[disabled] {
+    background-color: #eaeaea;
+}
+
 .btn {
     display: block;
     background: transparent;

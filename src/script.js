@@ -13,16 +13,31 @@ xhr.onload = function() {
     console.log('success!');
     networks = JSON.parse(xhr.responseText);
     printOptions();
+    enableSelect();
     console.log(networks);
   } else {
+    enableSelect();
     console.log('error');
   }
 };
+
+xhr.onerror = function() {
+  console.log('error');
+  enableSelect();
+}
 
 function cleanSelectoptions() {
   for (var i = 0; i < ssidSelect.length; i++) {
     ssidSelect.remove(1);
   }
+}
+
+function enableSelect() {
+  ssidSelect.removeAttribute('disabled');
+}
+
+function disableSelect() {
+  ssidSelect.setAttribute('disabled', 'disabled');
 }
 
 function printOptions() {
@@ -38,6 +53,7 @@ function printOptions() {
 
 refreshButton.onclick = function() {
   console.log('refresh networks');
+  disableSelect();
   cleanSelectoptions();
   xhr.timeout = 5000;
   xhr.open('POST', endpoint);
