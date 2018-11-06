@@ -3,6 +3,7 @@ var refreshButton = document.getElementById('refreshButton');
 var backButton = document.getElementById('backButton');
 var ssidText = document.getElementById('ssidText');
 var ssidSelect = document.getElementById('ssidSelect');
+var password = document.getElementById('password');
 var changeInput = document.getElementById('changeInput');
 var loadingLabel = document.getElementById('loadingLabel');
 var networks = null;
@@ -60,6 +61,29 @@ function printOptions() {
 
 function submitForm(form) {
   console.log('submit!');
+
+  var _xhr = new XMLHttpRequest();
+
+  _xhr.onload = function() {
+    if (_xhr.status >= 200 && _xhr.status < 300) {
+      console.log('success!');
+      console.log(_xhr);
+    } else {
+      console.log('error');
+    }
+  };
+
+  _xhr.onerror = function() {
+    console.log('error');
+  };
+
+  _xhr.open('POST', '/connect');
+  _xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  _xhr.timeout = 15000;
+  _xhr.send(JSON.stringify({
+    ssid: manuallySearch ? ssidText.value : ssidSelect.value,
+    password: password.value
+  }));
 }
 
 refreshButton.onclick = function() {
