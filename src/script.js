@@ -6,8 +6,11 @@ var ssidSelect = document.getElementById('ssidSelect');
 var password = document.getElementById('password');
 var changeInput = document.getElementById('changeInput');
 var loadingLabel = document.getElementById('loadingLabel');
+var modal = document.getElementById('modal');
+var doneModal = document.getElementById('doneModal');
 var networks = null;
 var endpoint = 'http://' + location.host + '/scannetworks';
+var attempsConnection = 0;
 
 var xhr = new XMLHttpRequest();
 xhr.onload = function() {
@@ -29,9 +32,7 @@ xhr.onerror = function() {
 }
 
 function cleanSelectoptions() {
-  for (var i = 0; i < ssidSelect.length; i++) {
-    ssidSelect.remove(1);
-  }
+  ssidSelect.options.length = 0;
 }
 
 function enableSelect() {
@@ -59,38 +60,78 @@ function printOptions() {
   });
 }
 
+function openModal() {
+  modal.classList.remove('hide');
+}
+
+function closeModal() {
+  modal.classList.add('hide');
+}
+
+function openDoneModal() {
+  doneModal.classList.remove('hide');
+}
+
 function submitForm(form) {
   console.log('submit!');
+  openModal();
 
   var _xhr = new XMLHttpRequest();
-
+  var data = JSON.stringify({
+    ssid: manuallySearch ? ssidText.value : ssidSelect.value,
+    password: password.value
+  });
+  
   _xhr.onload = function() {
     if (_xhr.status >= 200 && _xhr.status < 300) {
       console.log('success!');
-      console.log(_xhr);
+      var response = JSON.parse(_xhr.responseText);
+      console.log(response);
+      alert('connected to IP: ' + response.ip);
+      closeModal();
+      openDoneModal();
     } else {
       console.log('error');
+      if (attempsConnection < 2) {
+        console.log('reconnecting:', attempsConnection);
+        ++attempsConnection;
+        sendRequestConnection();
+      } else {
+        attempsConnection = 0;
+        alert('Unable to connect');
+        closeModal();
+      }
     }
   };
 
   _xhr.onerror = function() {
     console.log('error');
+    if (attempsConnection < 2) {
+      console.log('reconnecting:', attempsConnection);
+      ++attempsConnection;
+      sendRequestConnection();
+    } else {
+      attempsConnection = 0;
+      alert('Unable to connect');
+      closeModal();
+    }
   };
 
-  _xhr.open('POST', '/connect');
-  _xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  _xhr.timeout = 15000;
-  _xhr.send(JSON.stringify({
-    ssid: manuallySearch ? ssidText.value : ssidSelect.value,
-    password: password.value
-  }));
+  function sendRequestConnection() {
+    _xhr.open('POST', '/connect');
+    _xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    _xhr.timeout = 15000;
+    _xhr.send(data);
+  }
+
+  sendRequestConnection();
 }
 
 refreshButton.onclick = function() {
   console.log('refresh networks');
   disableSelect();
   cleanSelectoptions();
-  xhr.timeout = 5000;
+  xhr.timeout = 7000;
   xhr.open('POST', endpoint);
   xhr.send();
 };
