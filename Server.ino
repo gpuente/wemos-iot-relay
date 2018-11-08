@@ -1,6 +1,7 @@
 void setupServer() {
 	server.on("/", HTTP_GET, handleRoot);
   server.on("/healthcheck", HTTP_GET, healthCheck);
+  server.on("/reset", HTTP_GET, resetCredentials);
 	server.on("/connect", HTTP_POST, handleConnect);
   server.on("/scannetworks", HTTP_POST, scanWifiNetworks);
 	server.on("/api/v1/relay", HTTP_GET, getRelay);
@@ -9,6 +10,15 @@ void setupServer() {
   server.on("/api/v1/relay/switch", HTTP_PUT, switchRelay);
 	server.on("/api/v1/relay", HTTP_DELETE, deleteRelay);
 	server.on("/api/v1/relay", HTTP_POST, createRelay);
+}
+
+
+
+
+
+void resetCredentials() {
+  clearEeprom();
+  server.send(200, "application/json", "{\"status\":\"ok\",\"message\":\"credentials deleted\"}");
 }
 
 
@@ -75,6 +85,8 @@ void handleConnect() {
   if (connected) {
     Serial.println("connected to ip: ");
     Serial.print(WiFi.localIP());
+    saveCredentials();
+    
     server.send(200, "application/json", "{\"status\":\"ok\",\"ip\":\"" + WiFi.localIP().toString() + "\"}");
   } else {
     Serial.println("Error to connect");
@@ -434,4 +446,43 @@ void createRelay() {
   relay.toJson().printTo(json);
 
   server.send(200, "application/json", json);
+}
+
+
+
+
+
+void saveCredentials() {
+  wifiCredentials tempCredentials;
+  strcpy(tempCredentials.ssid, ssidClient);
+  strcpy(tempCredentials.password, passwordClient);
+
+  EEPROM.put(0, tempCredentials);
+  EEPROM.commit();
+
+  Serial.println("Credentials stored");
+}
+
+
+
+
+
+
+void readCredentials() {
+  EEPROM.get(0, credentials);
+  Serial.println("Credentials restored");
+}
+
+
+
+
+
+
+
+void clearEeprom() {
+  for (int i = 0; i < EEPROM.length(); i++) {
+    EEPROM.write(i, 0);
+  }
+  EEPROM.commit();
+  Serial.println("Credentials deleted");
 }

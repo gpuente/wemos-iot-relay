@@ -3,9 +3,11 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h> 
 #include <ESP8266WebServer.h>
+#include <EEPROM.h>
 #include <ArduinoJson.h>
 #include "Relay.h"
 #include "RelayCollection.h"
+#include "WifiCredentials.h"
 
 /* Default credentials for wemos AP */
 const char *ssid = "wemos-iot-relay";
@@ -15,6 +17,8 @@ const char *password = "iotpassword";
 char ssidClient[32];
 char passwordClient[64];
 bool providedCredentials = false;
+wifiCredentials credentials;
+
 
 ESP8266WebServer server(80);
 
@@ -34,6 +38,7 @@ RelayCollection relayCollection(relays);
 
 void setup() {
 	delay(1000);
+  	EEPROM.begin(512);
 	WiFi.mode(WIFI_AP_STA);
 	
 	Serial.begin(115200);
