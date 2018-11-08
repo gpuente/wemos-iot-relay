@@ -1,5 +1,6 @@
 void setupServer() {
 	server.on("/", HTTP_GET, handleRoot);
+  server.on("/healthcheck", HTTP_GET, healthCheck);
 	server.on("/connect", HTTP_POST, handleConnect);
   server.on("/scannetworks", HTTP_POST, scanWifiNetworks);
 	server.on("/api/v1/relay", HTTP_GET, getRelay);
@@ -8,6 +9,16 @@ void setupServer() {
   server.on("/api/v1/relay/switch", HTTP_PUT, switchRelay);
 	server.on("/api/v1/relay", HTTP_DELETE, deleteRelay);
 	server.on("/api/v1/relay", HTTP_POST, createRelay);
+}
+
+
+
+
+
+
+void healthCheck() {
+  Serial.println("healthCheck: up");
+  server.send(200, "application/json", "{\"status\":\"ok\",\"message\":\"wemos-iot-relay service is up\"}");
 }
 
 
