@@ -13,6 +13,6 @@ var inline = require('gulp-inline')
             css: [minifyCss]
         }))
         .pipe(htmlmin({ collapseWhitespace: true }))
-        // .pipe(replace('"', '\\"'))
+        .pipe(replace('"', '\\"'))
         .pipe(gulp.dest('dist/'));
   });
